@@ -53,7 +53,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "qr_studId.urls"
-
+AUTH_USER_MODEL='dashboard.users'
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
