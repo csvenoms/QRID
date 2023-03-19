@@ -62,7 +62,7 @@ class users(AbstractBaseUser):
     email= models.EmailField(unique=True, max_length=254, primary_key=True)
     phone_no= models.CharField(max_length=50, null=False)
     # password= models.CharField(max_length=20, null=False)
-    student_id=models.CharField(max_length=50)
+    student_id=models.CharField(max_length=50,default='-')
     instructor_course= models.ForeignKey(Course, default='-', on_delete=models.CASCADE)
     student_department= models.ForeignKey(Department,default='-', on_delete=models.CASCADE)
     batch= models.CharField(max_length=50, null=False, default='-')
@@ -89,3 +89,22 @@ class users(AbstractBaseUser):
         return True
     def has_delete_permission(self,request, obj=None):
         return True
+
+def upload_filepath(self,filename):
+    return f'Material/{self}/'
+
+class courseMaterial(models.Model):
+    
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    chapter = models.CharField(max_length=255)
+    title= models.CharField(max_length=255)
+        
+    def p(self,filename):
+        
+        return f'/Material/{self.course.course_title}/{filename}'
+    material= models.FileField( upload_to=p, max_length=255)
+        
+    def __str__(self) -> str:
+        print(self.course)
+
+        return  self.chapter +" "+ self.title
