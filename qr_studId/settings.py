@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'dashboard',
     'gateguard',
     'instructor',
+
+      'crispy_forms',
+    'crispy_bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +131,6 @@ MEDIA_URL= 'media/'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = 'login'
+
+
+CRISPY_TEMPLATE_PACK='bootstrap4'
