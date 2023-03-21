@@ -1,8 +1,9 @@
 from django.shortcuts import render
-
+from django.contrib.auth.decorators import *
 from dashboard.models import Course
 from. forms import *
 # Create your views here.
+@login_required
 def instructorHome(req):
     o=Course.objects.get(course_title="Introductio to Arteficial Intelegence")
     print(o.pk)
