@@ -20,6 +20,9 @@ class Course(models.Model):
     course_title= models.CharField(max_length=50, unique=True,primary_key=True) 
     credit_hour = models.CharField(max_length=10)
     target_group=  models.ForeignKey(Department,on_delete=models.CASCADE)
+    def get(self,course_title):
+        course_title=self.course_title
+        return course_title
 
     def __str__(self):
         return self.course_title  
@@ -96,15 +99,14 @@ def upload_filepath(self,filename):
 
 class courseMaterial(models.Model):
     
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.CharField(max_length=255)
     chapter = models.CharField(max_length=255)
     title= models.CharField(max_length=255)
         
     def p(self,filename):
-        
-        return f'/Material/{self.course.course_title}/{filename}'
+        return f'Material\{self.course}\{filename}'
     material= models.FileField( upload_to=p, max_length=255)
-        
+    
     def __str__(self) -> str:
         print(self.course)
 

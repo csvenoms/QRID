@@ -5,4 +5,4 @@ class MaterialForm(forms.ModelForm):
     
     class Meta:
         model = courseMaterial
-        fields = "__all__"
+        fields = '__all__'

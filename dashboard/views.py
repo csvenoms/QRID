@@ -38,9 +38,10 @@ def login(request):
           
             u=user.roll
             auth.login(request,user)
-            if str(u) == 'Student':
-                return redirect('instructorHome')
-            elif str(u) == 'Instructor':
+            # if str(u) == 'Student':
+            #     return redirect('instructorHome')
+            if str(u) == 'Instructor':
+                print(user.instructor_course)
                 return redirect('instructorHome')
             elif str(u) == 'user':
                 return redirect('home')

@@ -14,12 +14,18 @@
         <img src="" alt="atendance qr goes here">
     </div>
 <div>
+  
     <h1>Send message</h1>
-    <form action="" method="post">
+    
+    <form action="{% url 'addMaterial' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="text" name="message" id="">
-
-        <input type="file" name="file" id="">
+        
+        <h2>send course material</h2>
+      
+        <input type="text" name="course" id=""  value ="{{user.instructor_course}}" hidden> 
+         <input type="text" name="chapter" id=""> 
+        <input type="text" name="title" id=""> 
+        <input type="file" name="material" id="" > 
         <input type="submit" value="Send">
     </form>
 </div>
@@ -29,6 +35,6 @@
     <p>this part will featch the students atteded in class right after taking attendance. putting t in table format seems the best way to me.</p>
 
 </div>
-<a href="{% url 'login' %}">Login</a>
+<a href="{% url 'login' %}">Logout</a>
 </body>
 </html>
