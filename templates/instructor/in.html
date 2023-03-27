@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>Testing QR code</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script type="text/javascript">
+            function generateBarCode()
+            {
+                let cd= new Date()
+                let cday= cd.getDate()
+                var nric = "advanced programming with java,"+cd.getDate()+"/"+cd.getMonth()+"/"+cd.getFullYear()
+                var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + nric + '&amp;size=450x450';
+                $('#barcode').attr('src', url);
+            }
+        </script>
+    </head>
+    <body>
+        <button onclick="generateBarCode()">Get attendance</button>
+
+      <img id='barcode' 
+            src="https://api.qrserver.com/v1/create-qr-code/?data=HelloWorld&amp;size=100x100" 
+            alt="" 
+            title="advanced programming with java 27/03/2023" 
+            width="450" 
+            height="450" />
+    </body>
+</html>

@@ -1,9 +1,11 @@
+from datetime import date, time
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import *
 from dashboard.models import Course
+from instructor.models import qrAttendance
 from. forms import *
 from django.contrib import messages
-
+import qrcode
 # Create your views here.
 @login_required
 def instructorHome(req):
@@ -19,13 +21,14 @@ def instructorHome(req):
             print("aksdfhjhfa")
             
                 
-               
+         
     
     context={
-        'form':MaterialForm()
+        'form':MaterialForm(),
     }
     
     return render(req,'instructor/home.html',context )
+
 def addMaterial(req):
     if req.method == 'POST':
                 

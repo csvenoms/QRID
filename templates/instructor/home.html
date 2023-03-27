@@ -5,16 +5,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instructor</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        function generateBarCode()
+        {
+            let cd= new Date()
+            let cday= cd.getDate()
+            var nric = "{{user.instructor_course}},"+cd.getDate()+"/"+cd.getMonth()+"/"+cd.getFullYear();
+            document.getElementById("atdiv").style.display="inline";
+            var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + nric + '&amp;size=450x450';
+            $('#barcode').attr('src', url);
+        }
+    </script>
 </head>
 <body>
     <header>Instructors dashboard</header>
 
     <div>
         <h1>Get Attendance</h1>
-        <img src="" alt="atendance qr goes here">
+        <body>
+            <button onclick="generateBarCode()">Get attendance</button>
+    <div id="atdiv" style="display: none;">
+          <img id='barcode' 
+                src="https://api.qrserver.com/v1/create-qr-code/?data=HelloWorld&amp;size=100x100" 
+                alt="" 
+                title="daily attendance" 
+                width="450" 
+                height="450" /> </div>
     </div>
 <div>
-  
+    
+      
     <h1>Send message</h1>
     
     <form action="{% url 'addMaterial' %}" method="post" enctype="multipart/form-data">
@@ -37,4 +58,19 @@
 </div>
 <a href="{% url 'login' %}">Logout</a>
 </body>
+<script>
+    var qr = new QRCode(document.getElementById('qrcode'), {
+        let currentDate = new Date();
+let cDay = currentDate.getDate()
+let cMonth = currentDate.getMonth() + 1
+let cYear = currentDate.getFullYear()
+        text: "{{user.instructor_course}} "+cDay+"/"+cMonth+"/"+cYear,
+        width: 256,
+        height: 256,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+    </script>
 </html>
