@@ -16,8 +16,10 @@
         <main>
             <div id="qrcode"></div>
         </main>
-        
-        {% qr_from_text course size="L" %}
+       <div> <div id="getAtte" style="display: none">
+        {% qr_from_text course size="L" %}</div>
+        <button onclick="getAttendanceQR()">Get attendace</button>
+    </div>
 <div>
     
       
@@ -44,7 +46,9 @@
 <a href="{% url 'login' %}">Logout</a>
 </body>
 <script>
- 
+ function getAttendanceQR(){
+    document.getElementById('getAtte').style.display= 'block';
+ }
 </script>
  
 </html>
