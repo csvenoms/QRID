@@ -5,26 +5,24 @@ from dashboard.models import Course
 from instructor.models import qrAttendance
 from. forms import *
 from django.contrib import messages
-import qrcode
+from datetime import date
 # Create your views here.
 @login_required
 def instructorHome(req):
+    
     if req.method == 'POST':
               
-        # print(type(req.POST['course']))
-        # my_object = Course.objects.get(course_title= req.user.instructor_course)
-        # my_object_as_string = str(my_object)
-        # print(type(my_object_as_string))
+        
         form = MaterialForm(req.POST,req.FILES)
         if form.is_valid():
             form.save()
-            print("aksdfhjhfa")
             
                 
          
-    
+    data = f"{req.user.instructor_course},{date.today()}"
     context={
         'form':MaterialForm(),
+        'course': data,
     }
     
     return render(req,'instructor/home.html',context )
