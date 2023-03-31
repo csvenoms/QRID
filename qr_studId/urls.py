@@ -19,12 +19,28 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import TokenObtainPairView
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+from . import views
+@csrf_exempt
+def my_endpoint(request):
+    if request.method == 'GET':
+        data = {'message': 'Hello from my custom endpoint!'}
+        return JsonResponse(data)
+    else:
+        return HttpResponse(status=405) 
 
 
 urlpatterns = [
     path("admin/",  admin.site.urls),
     path("", include("dashboard.urls")),
     path("gateguard/", include("gateguard.urls")),
-    path('', include('instructor.urls'))
+    path('', include('instructor.urls')),  
+    path('api-token-auth/', views.CustomAuthToken.as_view()),
+    path('api_login',views.MyView.as_view()),
+    path('api/my_endpoint/', my_endpoint, name='my_endpoint'),
+
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)
