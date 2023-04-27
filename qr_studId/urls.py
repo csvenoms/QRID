@@ -38,6 +38,7 @@ urlpatterns = [
     path("", include("dashboard.urls")),
     path("gateguard/", include("gateguard.urls")),
     path('', include('instructor.urls')),  
+    path('registrar/', include('collageRegistrar.urls')), 
     path('api-token-auth/', views.CustomAuthToken.as_view()),
     path('api_login',views.MyView.as_view()),
     path('api/my_endpoint/', my_endpoint, name='my_endpoint'),

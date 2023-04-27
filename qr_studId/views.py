@@ -9,7 +9,7 @@ class CustomAuthToken(ObtainAuthToken):
         token = Token.objects.get(key=response.data['token'])
         user = token.user
         # Add the user object to the response data
-        data = {'token': token.key, 'user_id': user.pk, 'email': user.email, 'roll':user.roll_id }
+        data = {'token': token.key, 'user_id': user.pk, 'email': user.email, 'roll':user.roll_id, 'name':user.first_name,'lname':user.last_name }
         return Response(data)
 
 
