@@ -37,7 +37,7 @@ urlpatterns = [
     path("admin/",  admin.site.urls),
     path("", include("dashboard.urls")),
     path("gateguard/", include("gateguard.urls")),
-    path('', include('instructor.urls')),  
+    path('instructor/', include('instructor.urls')),  
     path('registrar/', include('collageRegistrar.urls')), 
     path('api-token-auth/', views.CustomAuthToken.as_view()),
     path('api_login',views.MyView.as_view()),

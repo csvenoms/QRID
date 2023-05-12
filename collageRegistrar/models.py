@@ -6,7 +6,7 @@ class Announcement(models.Model):
     announcer= models.CharField(max_length=50)
     
     def uploadAnnouncement(self,filename):
-        return f"announcement/{self.announcer}"
+        return f"announcement\{self.announcer}\{filename}"
     announcement= models.ImageField(upload_to=uploadAnnouncement)
     announcement_time= models.DateTimeField(auto_now_add= True)
     def __str__(self):
