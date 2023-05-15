@@ -2,6 +2,8 @@ from django.shortcuts import render
 from .forms import *
 from.models import *
 from rest_framework.response import Response
+from rest_framework.views import *
+from .serializers import *
 # Create your views here.
 def postAnnouncement(req):
     if req.method=="POST":
@@ -19,3 +21,9 @@ def getAnnouncementAPI(req):
     ann= Announcement.objects.all()
     data= {"announsor": ann.announcer,"announcement":ann.announcement.url,"announced": ann.announcement_time}
     return Response(data)
+
+class AnnouncementApi(APIView):
+    def get(self,req,*args,**kwargs):
+        announcements= Announcement.objects.all()
+        serializer = AnnouncementSerializer(announcements, many= True)
+        return Response(serializer.data)
