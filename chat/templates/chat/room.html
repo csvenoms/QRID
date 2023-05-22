@@ -1,0 +1,23 @@
+{% extends 'chat/base.html' %}
+
+{% block content %}
+{% comment %}    
+    <ul id="messages">
+        {% for message in messages %}
+            <li><b>{{ message.user.username }}:</b> {{ message.content }}</li>
+        {% endfor %}
+    </ul> {% endcomment %}
+
+{% comment %} 
+    <form id="message-form" method="POST">
+        {% csrf_token %}
+        <input type="text" id="message-input" name="message" autocomplete="off">
+        <button type="submit">Send</button>
+    </form> {% endcomment %}
+    {% for roo in room %}
+    
+      <a href="{% url 'message' roo.id %}">{{roo.name}}</a><br>
+{% endfor %}
+{% endblock %}
+
+
