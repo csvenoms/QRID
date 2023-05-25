@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from.forms import *
+from .models import *
 from django.contrib import messages,auth
 # Create your views here.
 
@@ -56,3 +57,29 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect('login')
+
+from rest_framework.views import *
+from .serializzers import *
+
+class GetSavedAnnouncements(APIView):
+    def get_queryset(self):
+        user = self.request.user
+        print(user)
+        return savedAnnouncements.objects.filter(user=user)
+    def post(self, request, format=None):
+        serializer = UserAnnouncementSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+from rest_framework.generics import RetrieveAPIView
+
+class GetUserInfo(RetrieveAPIView):
+    queryset = users.objects.all()
+    serializer_class = UserSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)

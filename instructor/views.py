@@ -19,7 +19,7 @@ def instructorHome(req):
             
                 
          
-    data ="{"+f"'course_title':'{req.user.instructor_course}','date':'{date.today()}','department':'{req.user.student_department}'"+","
+    data ="{"+f"'course_title':'{req.user.instructor_course}','date':'{date.today()}','department':'{req.user.student_department}', 'targerGroup':'{req.user.instructor_course.target_group}', 'year': '{req.user.instructor_course.year}'"+","
     context={
         'form':MaterialForm(),
         'course': data,

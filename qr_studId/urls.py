@@ -36,6 +36,7 @@ def my_endpoint(request):
 urlpatterns = [
     path("admin/",  admin.site.urls),
     path("", include("dashboard.urls")),
+    path("api_logout", views.Logout.as_view()),
     path("gateguard/", include("gateguard.urls")),
     path('instructor/', include('instructor.urls')),  
     path('registrar/', include('collageRegistrar.urls')), 

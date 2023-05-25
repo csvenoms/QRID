@@ -20,6 +20,7 @@ class Course(models.Model):
     course_title= models.CharField(max_length=50, unique=True,primary_key=True) 
     credit_hour = models.CharField(max_length=10)
     target_group=  models.ForeignKey(Department,on_delete=models.CASCADE)
+    year = models.CharField(max_length=10, default="2nd")
     def get(self,course_title):
         course_title=self.course_title
         return course_title
@@ -68,9 +69,9 @@ class users(AbstractBaseUser):
     phone_no= models.CharField(max_length=50, null=False)
     student_id=models.CharField(max_length=50,default='-')
     instructor_course= models.ForeignKey(Course,to_field='course_title', default='Introductio to Arteficial Intelegence', on_delete=models.CASCADE)
-    student_department= models.ForeignKey(Department,to_field="department",default='Computer Science', on_delete=models.CASCADE)
+    student_department= models.ForeignKey(Department,to_field="department",default='.', on_delete=models.CASCADE)
     batch= models.CharField(max_length=50, null=False, default='-')
-    roll= models.ForeignKey(roll, on_delete=models.CASCADE,to_field="roll", default="Student")
+    roll= models.ForeignKey(roll, on_delete=models.CASCADE,to_field="roll", default=".")
     date_joined= models.DateTimeField(auto_now_add= True)
     last_login= models.DateTimeField(auto_now=True)
     is_admin= models.BooleanField(default=False)
@@ -103,6 +104,7 @@ class courseMaterial(models.Model):
     course = models.CharField(max_length=255)
     chapter = models.CharField(max_length=255)
     title= models.CharField(max_length=255)
+    
         
     def p(self,filename):
         return f'Material\{self.course}\{filename}'
@@ -112,3 +114,13 @@ class courseMaterial(models.Model):
         print(self.course)
 
         return  self.chapter +" "+ self.title
+    
+
+
+class savedAnnouncements(models.Model):
+    user = models.CharField(max_length=50)
+    announcement_id = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.user+datetime.now()
+    
