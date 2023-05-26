@@ -20,9 +20,11 @@ class Announcement(models.Model):
         return self.announcer
 
 class CourseRegitration(models.Model):
+    email = models.CharField(max_length= 250, unique=True)
     fullName= models.CharField(max_length=100)
     sex= models.CharField( max_length=50)
-    date_of_birth= models.DateField(auto_now=False, auto_now_add=False)
+    year= models.CharField(max_length=4, default="")
+    date_of_birth= models.CharField(max_length=100, default= "")
     mothers_fullName= models.CharField(max_length=100)
     address_region=models.CharField(max_length=100)
     address_zone=models.CharField(max_length=100)
@@ -32,24 +34,23 @@ class CourseRegitration(models.Model):
     address_houseNo=models.CharField(max_length=100)
     address_POBox=models.CharField(max_length=100)
     prep_school_name= models.CharField(max_length=100)
-    prep_complete_date= models.DateField(auto_now= False, auto_now_add= False)
+    prep_complete_date= models.CharField(max_length=100, default= "")
     prep_school_region=models.CharField(max_length=100)
     prep_school_zone=models.CharField(max_length=100)
     prep_school_woreda=models.CharField(max_length=100)
     prep_school_kebele=models.CharField(max_length=100)
     prep_school_city=models.CharField(max_length=100)
-    collage_join_year= models.DateField(auto_now= False, auto_now_add=False)
+    collage_join_year= models.CharField(max_length=100, default= "")
     department= models.CharField(max_length=100)
-    date_of_withdrawal= models.DateField(auto_now= False, auto_now_add=False, null=True)
-    demanded_service= models.CharField(max_length=100)
-    demand_type= models.CharField(max_length=100)
-    estimated_cost=models.CharField(max_length=100)
-    date_of_advance_payment=models.DateField(auto_now=False,auto_now_add= False, null=True)
-    
+    date_of_withdrawal= models.CharField(null=True,max_length=100, default= "")
+    demanded_service= models.CharField(max_length=100, default= "")
+    demand_Service_cashkind= models.CharField(max_length=100, null=True)
+    estimated_cost=models.CharField(null=True,max_length=100, default= "")
+    date_of_advance_payment=models.CharField(max_length=100, default= "", null=True)
+    semister= models.CharField(max_length= 3, default= "I")
     
     def __str__(self):
         return self.fullName
 
 
-    
     
