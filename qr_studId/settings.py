@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     "django_static_jquery3",
 ]
 
+
+ASGI_APPLICATION= "qr_studId.asgi.application"
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
@@ -97,7 +100,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
-WSGI_APPLICATION = "qr_studId.wsgi.application"
+# WSGI_APPLICATION = "qr_studId.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
