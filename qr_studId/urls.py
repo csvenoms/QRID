@@ -43,6 +43,6 @@ urlpatterns = [
     path('api-token-auth/', views.CustomAuthToken.as_view()),
     path('api_login',views.MyView.as_view()),
     path('api/my_endpoint/', my_endpoint, name='my_endpoint'),
-
+    path('message/', include("chat.urls"))
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)

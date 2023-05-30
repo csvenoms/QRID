@@ -37,15 +37,16 @@ def login(request):
         if user is not None:
             print("user found")
           
-            u=user.roll
+            u=user.roll 
             auth.login(request,user)
-            # if str(u) == 'Student':
-            #     return redirect('instructorHome')
+          
             if str(u) == 'Instructor':
                 print(user.instructor_course)
                 return redirect('instructorHome')
-            elif str(u) == 'user':
+            elif str(u) == '':
                 return redirect('home')
+            elif str(u) == 'Student':
+                return redirect('getMessage')
         else:
             messages.error(request, 'wrong username or password')
     context={
@@ -62,10 +63,7 @@ from rest_framework.views import *
 from .serializzers import *
 
 class GetSavedAnnouncements(APIView):
-    def get_queryset(self):
-        user = self.request.user
-        print(user)
-        return savedAnnouncements.objects.filter(user=user)
+
     def post(self, request, format=None):
         serializer = UserAnnouncementSerializer(data=request.data)
         if serializer.is_valid():
@@ -82,4 +80,17 @@ class GetUserInfo(RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         user = self.get_object()
         serializer = self.get_serializer(user)
+        return Response(serializer.data)
+
+
+from collageRegistrar.serializers import *
+from collageRegistrar.models import Announcement 
+class SavedAnnouncementApi(APIView):
+    def get(self, request,pk):
+        my_objects = savedAnnouncements.objects.filter(user=pk).order_by("-id")
+
+        
+        serializer = UserAnnouncementSerializer(my_objects, many=True)
+
+        # Return the serialized data
         return Response(serializer.data)

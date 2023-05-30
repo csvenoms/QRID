@@ -26,24 +26,26 @@ SECRET_KEY = "django-insecure-t0^r7qfij5v=2lf@^ezd1vn1!ju9)y)lm-d6q=v@6*a%!+$0sf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.194.109.19','127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
     'dashboard',
     'gateguard',
     'instructor',
     'student',
     'collageRegistrar',
-    
+    'chat',
     'rest_framework',
     'rest_framework.authtoken',
     'qr_code',
@@ -51,7 +53,11 @@ INSTALLED_APPS = [
     "django_static_jquery3",
 ]
 
-
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -148,3 +154,5 @@ MEDIA_URL= 'media/'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = 'login'
+
+

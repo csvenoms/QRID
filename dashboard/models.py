@@ -19,8 +19,9 @@ class Course(models.Model):
     course_code= models.CharField(max_length=50,unique=True)
     course_title= models.CharField(max_length=50, unique=True,primary_key=True) 
     credit_hour = models.CharField(max_length=10)
-    target_group=  models.ForeignKey(Department,on_delete=models.CASCADE)
+    target_group=   models.CharField(max_length=50, default="")
     year = models.CharField(max_length=10, default="2nd")
+    semister= models.CharField(max_length=12, default="I")
     def get(self,course_title):
         course_title=self.course_title
         return course_title
@@ -119,8 +120,10 @@ class courseMaterial(models.Model):
 
 class savedAnnouncements(models.Model):
     user = models.CharField(max_length=50)
-    announcement_id = models.CharField(max_length=50)
+    announcer = models.CharField(max_length=50)
+    announcement = models.CharField(max_length=50)
+
     
     def __str__(self):
-        return self.user+datetime.now()
+        return self.user
     

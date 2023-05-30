@@ -36,3 +36,8 @@ class CourseRegistrationUpdateSerializer(serializers.ModelSerializer):
         model = CourseRegitration
         fields = ['date_of_withdrawal','demanded_service','demand_Service_cashkind','estimated_cost','date_of_advance_payment','semister','year']
     
+from dashboard.models import Course
+class CourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= Course
+        fields= "__all__"

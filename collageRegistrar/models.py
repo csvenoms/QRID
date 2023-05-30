@@ -53,4 +53,13 @@ class CourseRegitration(models.Model):
         return self.fullName
 
 
+class GradeCSVs(models.Model):
+    csv_file= models.FileField(upload_to="grades/")
+    dept= models.CharField(max_length=100)
+    batch= models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.batch}-{self.dept}"
+        
+
     

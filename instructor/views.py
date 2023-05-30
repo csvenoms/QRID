@@ -6,6 +6,29 @@ from instructor.models import *
 from. forms import *
 from django.contrib import messages
 from datetime import date
+
+
+
+def caesar_encrypt(plaintext, shift):
+    ciphertext = ''
+    for char in plaintext:
+        if char.isalpha():
+            ascii_code = ord(char)
+            shifted_ascii_code = ascii_code + shift
+            if char.isupper():
+                if shifted_ascii_code > ord('Z'):
+                    shifted_ascii_code -= 26
+                elif shifted_ascii_code < ord('A'):
+                    shifted_ascii_code += 26
+            else:
+                if shifted_ascii_code > ord('z'):
+                    shifted_ascii_code -= 26
+                elif shifted_ascii_code < ord('a'):
+                    shifted_ascii_code += 26
+            ciphertext += chr(shifted_ascii_code)
+        else:
+            ciphertext += char
+    return ciphertext
 # Create your views here.
 @login_required
 def instructorHome(req):
@@ -20,9 +43,12 @@ def instructorHome(req):
                 
          
     data ="{"+f"'course_title':'{req.user.instructor_course}','date':'{date.today()}','department':'{req.user.student_department}', 'targetGroup':'{req.user.instructor_course.target_group}', 'year': '{req.user.instructor_course.year}'"+","
+    shift = 3
+    encrypted_text = caesar_encrypt(data, shift)
+    
     context={
         'form':MaterialForm(),
-        'course': data,
+        'course': encrypted_text,
     }
     
     return render(req,'instructor/home.html',context )
@@ -32,15 +58,20 @@ from rest_framework.response import Response
 
 from .serializer import AttendanceSerializer
 
-
+userSet={0,}
 class CreateAttendance(CreateAPIView):
+    
     serializer_class = AttendanceSerializer
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response(serializer.data)
+        if request.data['stud_id'] in userSet:
+            return(Response({"message":"user already attended"}))
+        else:
+            userSet.add(request.data['stud_id'])
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            return Response(serializer.data)
     
 
             
