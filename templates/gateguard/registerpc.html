@@ -1,8 +1,9 @@
 {% extends 'gateguard/base.html' %}
 {% block content %}
-form action="#" method="POST" style="margin-left: 5%;">
+
 {% csrf_token %}
 <br>
+<form action="#" method="POST" style="margin-left: 5%;">
 <h3>Fill The Following Fields to Register Laptops</h3>
 <div><br>
     <form action="submit-form.php" method="post">
