@@ -1,12 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    check or register student pc here
-</body>
-</html>
+{% extends 'gateguard/base.html' %}
+{% block content %}
+form action="#" method="POST" style="margin-left: 5%;">
+{% csrf_token %}
+<br>
+<h3>Fill The Following Fields to Register Laptops</h3>
+<div><br>
+    <form action="submit-form.php" method="post">
+        
+        <label for="id_no">ID Number:</label>
+        <input type="text" id="id_no" name="id_no"><br>
+      
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name"><br>
+      
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name"><br>
+      
+        <label for="model">Model:  </label>
+        <input type="text" id="model" name="model"><br>
+      
+        <label for="serial_number">Serial Number:</label>
+        <input type="text" id="serial_number" name="serial_number"><br>
+
+<br>
+<div style="margin-left: 250px;">
+<button type="submit" class="btn btn-success d-block">Register</button>
+</div>
+
+</form>
+{% endblock %}

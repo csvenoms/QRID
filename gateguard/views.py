@@ -6,3 +6,6 @@ def checkID(req):
 
 def regpc(req):
     return render(req, 'gateguard/registerpc.html')
+def checkpc(req):
+    
+    return render(req, 'gateguard/checkpc.html')

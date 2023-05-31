@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Scan QR Code with HTML</title>
+  </head>
+  <body>
+    <h1>Scan QR Code with HTML</h1>
+    <video id="qr-video" width="320" height="240"></video>
+    <canvas id="qr-canvas" style="display:none"></canvas>
+    <div id="qr-data"></div>
+    <script src="https://raw.githubusercontent.com/zxing-js/library/master/zxing.min.js"></script>
+    <script>
+      const video = document.getElementById("qr-video");
+      const canvas = document.getElementById("qr-canvas");
+      const canvasContext = canvas.getContext("2d");
+      const qrData = document.getElementById("qr-data");
+
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+        .then(function (stream) {
+          video.srcObject = stream;
+          video.setAttribute("playsinline", true);
+          video.play();
+          requestAnimationFrame(scanQRCode);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+
+      function scanQRCode() {
+        canvasContext.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = canvasContext.getImageData(0, 0, canvas.width, canvas.height);
+        const code = ZXing.decode(imageData);
+        if (code !== null) {
+          console.log(code);
+          qrData.innerHTML = code; // Update the innerHTML property of the qrData div with the decoded data
+        }
+        requestAnimationFrame(scanQRCode);
+      }
+    </script>
+  </body>
+</html>

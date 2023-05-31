@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'qr_code',
 
-    "django_static_jquery3",
 ]
 
 
