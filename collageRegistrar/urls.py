@@ -13,5 +13,10 @@ urlpatterns=[
 
     path('gradeInpput', views.upload_csv, name= "gradesubmission"),
     path('getGrade/<str:pk>/',views.GetGradeResult.as_view(), name= 'getGradeResult'),
+<<<<<<< HEAD
+=======
+path('insertCourses', views.insertcoursesfromcsv, name= "insertCourses"),
+    path('getSemisterCourses/<str:pk>/',views.SemisterCoursesAPI.as_view(), name= 'getSemisterCourses'),
+>>>>>>> 89b72ec054789653b81752bb19cd4efad35c8598
 
 ]

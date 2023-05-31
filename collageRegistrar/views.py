@@ -15,6 +15,13 @@ from .forms import *
 from .models import *
 from dashboard.models import users
 from django.http import JsonResponse
+<<<<<<< HEAD
+=======
+from dashboard.forms import CourseForm
+
+
+
+>>>>>>> 89b72ec054789653b81752bb19cd4efad35c8598
 
 def caesar_encrypt(plaintext, shift):
     ciphertext = ''
@@ -112,6 +119,10 @@ def courseRegistration(req):
     context = {
         'secondYrCS': encrypted_text,
         'form': GradesForm(),
+<<<<<<< HEAD
+=======
+        # 'course_form': CourseForm()
+>>>>>>> 89b72ec054789653b81752bb19cd4efad35c8598
     }
     return render(req, 'collage/home.html', context)
     # else:
@@ -188,6 +199,111 @@ def submitGrades(req):
 def updateUserProfile(req):
     return HttpResponse("<h1>update user batch, or delete grad user from the main user table</h1>")
 
+<<<<<<< HEAD
+=======
+
+def assignInstructor(req):
+    return HttpResponse("<h1>assign instructor course, dept and batch</h1>")
+
+
+def generate_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="mymodel.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['email', 'fullName', 'sex', 'year', 'date_of_birth', 'mothers_fullName', 'address_zone', 'address_region', 'address_woreda', 'address_kebele', 'adress_city', 'address_houseNo', 'address_POBox', 'prep_school_name', 'prep_complete_date',
+                    'prep_school_region', 'prep_school_zone', 'prep_school_woreda', 'prep_school_kebele', 'prep_school_city', 'collage_join_year', 'department', 'date_of_withdrawal', 'demanded_service', 'demand_Service_cashkind', 'estimated_cost', 'date_of_advance_payment', 'semister'])
+
+    my_model_data = CourseRegitration.objects.all().values_list('email', 'fullName', 'sex', 'year', 'date_of_birth', 'mothers_fullName', 'mothers_fullName', 'address_region', 'mothers_fullName', 'address_woreda', 'address_kebele', 'adress_city', 'address_houseNo', 'address_POBox', 'prep_school_name',
+                                                                'prep_complete_date', 'prep_school_region', 'prep_school_zone', 'prep_school_woreda', 'prep_school_kebele', 'prep_school_city', 'collage_join_year', 'department', 'date_of_withdrawal', 'demanded_service', 'demand_Service_cashkind', 'estimated_cost', 'date_of_advance_payment', 'semister')
+    for row in my_model_data:
+        writer.writerow(row)
+
+    return response
+
+
+def my_view(request):
+    return redirect('courseRegistration')
+
+
+def upload_csv(request):
+    context = {
+
+        'form': GradesForm()
+    }
+    if request.method == 'POST':
+
+        form = GradesForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('courseRegistration')
+    return render(request, 'upload_csv.html', context)
+
+
+class GetGradeResult(APIView):
+    def get(self, request,pk, *args, **kwargs):
+        search_attr = pk
+        result = search_csv(search_attr)
+        data_dict = json.loads(result)
+        json_string = json.dumps(data_dict)
+
+
+        return Response(data_dict)
+
+
+def search_csv(search_attr):
+    u = users.objects.get(email=search_attr)
+    GetCsv = GradeCSVs.objects.get(dept=u.student_department.department, batch=u.batch)
+    csv_file = GetCsv.csv_file
+
+    # Read the CSV file and search for the attribute
+    csv_data = csv_file.read().decode('utf-8')
+    reader = csv.DictReader(csv_data.splitlines())
+    print('read')
+    for row in reader:
+        print(row['email'])
+        if row['email'] == search_attr:
+
+            print('found')
+            return json.dumps(row)
+    data = {'s': 'mdn'}
+    return data
+
+from dashboard.models import Course
+# Example usage
+def insertcoursesfromcsv(req):
+    if req.method=="POST":
+        csv_file = req.FILES['csv_file']
+        csv_data = csv_file.read().decode('utf-8')
+        reader = csv.DictReader(csv_data.splitlines())
+        print('read')
+        for row in reader:
+            course= Course.objects.create(
+            course_title= row['course_title'],
+            course_code= row['course_code'],
+            credit_hour= row['credit_hour'],
+            semister= row['semister'],
+            target_group= row['target_group'],
+            year=row['year'],
+            )
+
+        return redirect('courseRegistration')
+
+class SemisterCoursesAPI(APIView):
+    def get(self, request,pk):
+        my_object = users.objects.filter(email=pk).first()
+        sem= CourseRegitration.objects.filter(email=pk)
+        print(my_object.student_department.department)
+        print(my_object.batch)
+        courses= Course.objects.filter(target_group = my_object.student_department.department, year = my_object.batch, semister= "I")
+
+
+        
+        serializer = CourseSerializer(courses, many=True)
+
+        # Return the serialized data
+        return Response(serializer.data)            
+>>>>>>> 89b72ec054789653b81752bb19cd4efad35c8598
 
 def assignInstructor(req):
     return HttpResponse("<h1>assign instructor course, dept and batch</h1>")

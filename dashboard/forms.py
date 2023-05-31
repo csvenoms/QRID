@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from dashboard.models import users
+from .models import *
 
 class RegisterStudentForm(UserCreationForm):
     
@@ -14,4 +14,7 @@ class LoginiForm(forms.ModelForm):
         model = users
         fields = ['email','password']
 
-        
+class CourseForm(forms.ModelForm):
+    class Meta:
+        models= Course
+        fields= "__all__"

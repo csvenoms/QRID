@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- Font Awesome -->
+    <!-- MDB -->
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.1/mdb.min.js"
+    ></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.1/mdb.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      #chat2 .form-control {
+        border-color: transparent;
+      }
+
+      .msg
+      {
+        width: 78%;
+      }
+      
+      #chat2 .form-control:focus {
+        border-color: transparent;
+        box-shadow: inset 0px 0px 0px 1px transparent;
+      }
+
+      .divider:after,
+      .divider:before {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #eee;
+      }
+
+      .custom-file-upload {
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+        color: #292525;
+        background-color: transparent;
+        border-color: transparent;
+        border-radius: .25rem;
+      }
+      
+      .custom-file-upload input[type="file"] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <section style="background-color: #eee">
+       <div class="container py-5">
+        <div class="row d-flex justify-content-center">
+          <div class="col-md-10 col-lg-8 col-xl-6">
+            <div class="card" id="chat2">
+              <div
+                class="card-header d-flex justify-content-between align-items-center p-3"
+              >
+                <h5 class="mb-0">{{chats.dept}}-{{chat.batch}}</h5>
+              </div>
+              <div style="overflow: auto; height: 400px" id="display">
+                <div class="card">
+                  {% for m in chats %}
+                  
+                  <div class="card-body" data-mdb-perfect-scrollbar="true" style="position: relative" id="mcontent">
+                    {% if m.message %}
+                    <div class="d-flex flex-row justify-content-start" style="overflow: auto">
+                      {% if m.name %}
+                      <p style="width: fit-content; height: fit-content; background-color: lightblue; border-radius: 100%; padding: 10px;">
+                        {{ m.name|slice:":1" }}
+                      </p>
+                      {% else %}{% endif %}
+                      <div>
+                        {% if m.name == "yeab ayu" %}
+                        <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: lightblue">{{m.message}}</p>
+{% else %}                        <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7">{{m.message}}</p>
+
+                        {% endif %}
+                        <p class="small ms-3 mb-3 rounded-3 text-muted">{{m.time}}</p>
+                      </div>
+                    </div>
+                    {%endif %}
+                  </div>
+                  {% endfor %}
+                </div>
+             
+            </div>
+              
+     <div style="margin-top: 5px; margin-left: 15px; width: 100%;" >
+      <form method="POST"  class="my-form" enctype="multipart/form-data">
+        {% csrf_token %}
+       
+            <div
+            class="card-footer text-muted d-flex justify-content-start align-items-center p-3" id= "#contactForm"
+          >
+          <div>
+            <form method="POST"  class="my-form" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="telegram-input">
+                
+                <label for="file-upload" class="attachment-label">
+               
+                    <label for="file-input" >
+                      <i class="fas fa-paperclip"></i>
+                    </label>
+                    <input id="file-input" type="file" name="file" style="display: none;">
+                   <span style="margin: 0;"></span> <textarea rows="2" cols="50"  class="msg"  type="text" name="message" style="display:inline" autocomplete="off" placeholder="write a message..."></textarea><button  class="send-btn"><i class="fas fa-paper-plane"></i></button></span>
+                
+                           
+                </div>
+                </label>
+               
+            </form>
+          </div>
+          
+</form>
+          </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+
+  <script type="text/javascript">
+
+    
+function reload(){
+        
+        $.ajax({
+            url:  'http://10.194.109.19:8000/message',
+            type:  'get',
+            dataType:  'json',
+            success: function(data) {
+                $('#mcontent').html(data);
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        });
+    }
+    function scrollToEnd() {
+      var myDiv = document.getElementById("mcontent");
+      myDiv.scrollTop = myDiv.scrollHeight;
+  }
+  $(document).ready(function(){
+    scrollToEnd()
+  
+setInterval(function(){
+ 
+      $.ajax({
+          type: 'GET',
+          url : "/message/getMessage",
+          success: function(response){
+              console.log(response);
+              $("#display").empty();
+              for (var key in response.messages)
+              {
+                  var temp="<div class='container darker'><b>"+response.messages[key].user+"</b><p>"+response.messages[key].value+"</p><span class='time-left'>"+response.messages[key].date+"</span></div>";
+                  $("#display").append(temp);
+              }
+          },
+          error: function(response){
+             // alert('An error occured') 
+          }
+      });
+  },1000);
+    $("#contactForm").submit(function (e) {
+      // prevent from normal form behaviour
+
+      e.preventDefault();
+      // serialize the form data
+      
+      var serializedData = $(this).serialize();
+      $.ajax({
+        type: "POST",
+        url: "{% url 'sendMessage' %}",
+        data: serializedData,
+        success: function (response) {
+          //reset the form after successful submit
+
+          $("#contactForm")[0].reset();
+        },
+        error: function (response) {
+          console.log(response);
+        },
+      });
+    });
+  });
+</script>
+</html>
