@@ -1,7 +1,8 @@
 from django.urls import path
 from . import views
+from rest_framework.authtoken.views import ObtainAuthToken
 urlpatterns=[
-    path('post', views.postAnnouncement),
+    path('post', views.postAnnouncement, name='postAnnouncement'),
     # path('get', views.getAnnouncement),
     path('getAnnouncementAPI', views.AnnouncementApi.as_view(), name='getAnnouncemnets'),
     path('courseRegistration', views.CourseReg.as_view(), name='courseRegistration'),
@@ -13,10 +14,9 @@ urlpatterns=[
 
     path('gradeInpput', views.upload_csv, name= "gradesubmission"),
     path('getGrade/<str:pk>/',views.GetGradeResult.as_view(), name= 'getGradeResult'),
-<<<<<<< HEAD
-=======
-path('insertCourses', views.insertcoursesfromcsv, name= "insertCourses"),
+    path('insertCourses', views.insertcoursesfromcsv, name= "insertCourses"),
     path('getSemisterCourses/<str:pk>/',views.SemisterCoursesAPI.as_view(), name= 'getSemisterCourses'),
->>>>>>> 89b72ec054789653b81752bb19cd4efad35c8598
+    path('api-token-auth/', ObtainAuthToken.as_view()),
+    path('change-password/', views.ChangePasswordView.as_view()),
 
 ]

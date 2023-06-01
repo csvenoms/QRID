@@ -24,6 +24,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from . import views
+from dashboard import views as dsview
 @csrf_exempt
 def my_endpoint(request):
     if request.method == 'GET':
@@ -43,6 +44,8 @@ urlpatterns = [
     path('api-token-auth/', views.CustomAuthToken.as_view()),
     path('api_login',views.MyView.as_view()),
     path('api/my_endpoint/', my_endpoint, name='my_endpoint'),
-    path('message/', include("chat.urls"))
+    path('message/', include("chat.urls")),
+    path('logout',dsview.login, name="logout"),
+
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)

@@ -6,7 +6,7 @@ from instructor.models import *
 from. forms import *
 from django.contrib import messages
 from datetime import date
-
+from chat.forms import MessageForm
 
 
 def caesar_encrypt(plaintext, shift):
@@ -39,7 +39,10 @@ def instructorHome(req):
         form = MaterialForm(req.POST,req.FILES)
         if form.is_valid():
             form.save()
-            
+            messages.success(req,"Status= send")
+
+        else:
+            messages.error(req,"unable to send material")
                 
          
     data ="{"+f"'course_title':'{req.user.instructor_course}','date':'{date.today()}','department':'{req.user.student_department}', 'targetGroup':'{req.user.instructor_course.target_group}', 'year': '{req.user.instructor_course.year}'"+","
@@ -47,7 +50,7 @@ def instructorHome(req):
     encrypted_text = caesar_encrypt(data, shift)
     
     context={
-        'form':MaterialForm(),
+        'form': MessageForm(),
         'course': encrypted_text,
     }
     
@@ -76,14 +79,17 @@ class CreateAttendance(CreateAPIView):
 
             
 
-
+@login_required
 def addMaterial(req):
     if req.method == 'POST':           
         print('in addM') 
-        form = MaterialForm(req.POST,req.FILES)
+        form = MessageForm(req.POST,req.FILES)
         if form.is_valid():
             form.save()
-            print("aksdfhjhfa")
+            messages.success(req,"sent successfully")
+
             return redirect('instructorHome')
         else:
+            messages.error(req,"unable to send material")
+
             return redirect('instructorHome')

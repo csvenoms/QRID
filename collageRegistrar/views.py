@@ -15,13 +15,12 @@ from .forms import *
 from .models import *
 from dashboard.models import users
 from django.http import JsonResponse
-<<<<<<< HEAD
-=======
+
+
 from dashboard.forms import CourseForm
 
 
 
->>>>>>> 89b72ec054789653b81752bb19cd4efad35c8598
 
 def caesar_encrypt(plaintext, shift):
     ciphertext = ''
@@ -44,18 +43,22 @@ def caesar_encrypt(plaintext, shift):
             ciphertext += char
     return ciphertext  # Create your views here.
 
-
-def postAnnouncement(req):
-    if req.method == "POST":
-        form = AnnForm(req.POST, req.FILES)
-        if form.is_valid:
+from django.contrib import messages
+def postAnnouncement(request):
+    if request.method == 'POST':
+        form = AnnForm(request.POST, request.FILES)
+        if form.is_valid():
             form.save()
+            m= messages.error(request,"posted sucessfully!!")
+            return redirect(postAnnouncement)
+        else:
+            m= messages.error(request,"unable to post. the form is not valied")
     else:
         form = AnnForm()
     context = {
         'form': form
     }
-    return render(req, 'collage/post.html', context)
+    return render(request, 'collage/post.html', context)
 
 
 class AnnouncementApi(APIView):
@@ -119,10 +122,10 @@ def courseRegistration(req):
     context = {
         'secondYrCS': encrypted_text,
         'form': GradesForm(),
-<<<<<<< HEAD
-=======
+
+
         # 'course_form': CourseForm()
->>>>>>> 89b72ec054789653b81752bb19cd4efad35c8598
+
     }
     return render(req, 'collage/home.html', context)
     # else:
@@ -198,9 +201,6 @@ def submitGrades(req):
 
 def updateUserProfile(req):
     return HttpResponse("<h1>update user batch, or delete grad user from the main user table</h1>")
-
-<<<<<<< HEAD
-=======
 
 def assignInstructor(req):
     return HttpResponse("<h1>assign instructor course, dept and batch</h1>")
@@ -303,7 +303,6 @@ class SemisterCoursesAPI(APIView):
 
         # Return the serialized data
         return Response(serializer.data)            
->>>>>>> 89b72ec054789653b81752bb19cd4efad35c8598
 
 def assignInstructor(req):
     return HttpResponse("<h1>assign instructor course, dept and batch</h1>")
@@ -373,4 +372,45 @@ def search_csv(search_attr):
     return data
 
 
+
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.contrib.auth.hashers import make_password
 # Example usage
+class ChangePasswordView(generics.UpdateAPIView):
+    
+    permission_classes = (IsAuthenticated,)
+
+    def post(self,req):
+        old_password= req.data.get('old_password')
+        new_password= req.data.get('new_password')
+        user= req.user
+        if not user.check_password(old_password):
+            return Response({'error': 'Incorrect old password'}, status=400)
+        user.password= make_password(new_password)
+        user.save()
+        return Response({"status":"password changed"})
+
+        4
+
+  
+    def put(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer is valid:
+            # Check old password
+            old_password = request.data.get("old_password")
+            if not self.object.check_password(old_password):
+                return Response({"old_password": ["Wrong password."]}, status=400)
+
+            # Set new password
+            self.object.set_password(request.data.get("new_password"))
+            self.object.save()
+            response = {"status": "success", "message": "Password updated successfully"}
+            return Response(response)
+
+        return Response(serializer.errors, status=400)

@@ -141,15 +141,7 @@
     </style>
 
 <body style="background-color: bisque;">
-    {% if messages %}
-    {% for mess in messages %}
-    <div class="alert alert-{{ message.tags }}">
-
-        <h1>{{mess}}</h1>
-
-    </div>
-    {% endfor %}
-    {% endif %}
+   
 
     <header class="site-header">
         <nav class="navbar navbar-dark bg-dark">
@@ -174,29 +166,31 @@
         <button onclick="getAttendanceQR()" style="margin-left: 5%; margin-top: 10px;">Get attendace</button>
     </div>
     <div style="display:flex">
-        <div style="margin-right: -40px;">
+        <div style="margin-right: -40px; margin-top: 40px" >
 
         <form action="{% url 'addMaterial' %}" method="post" enctype="multipart/form-data" class="form">
             {% csrf_token %}
-
+{% if messages %}
+{% for m in messages %}
+<h3> {{m}} </h3>
+{% endfor %}
+{% endif %}
             <h2>send course material</h2>
+<input type="text" name="message" id="" placeholder="Course chapter" >
+            <input type="text" name="email" id="" value="{{user.email}}"  hidden>
+            <input type="text" name="name" id="" value="{{user.first_name}} {{user.last_name}}" hidden>
+            <input type="text" name="dept" id="" value="{{user.student_department}}" hidden >
+            <input type="text" name="batch" id="" value="{{user.instructor_course.year}}" hidden >
 
-            <input type="text" name="course" id="" value="{{user.instructor_course}}" hidden>
-            <input type="text" name="chapter" id="" placeholder="Enter the chapter">
-            <input type="text" name="title" id="" placeholder="Enter the title of the chapter">
-            <input type="file" name="material" id="">
-            <input type="submit" value="Send" class="btn btn-primary">
+            <input type="file" name="chfile" id="" >
+            <br>
+           <input type="submit" value="Send" class="btn btn-primary">
         </form>
     </div>
     </div>
 </div>
-    <div>
-        <h1>attended students of the day</h1>
-        <p>this part will featch the students atteded in class right after taking attendance. putting t in table
-            format seems the best way to me.</p>
-
-    </div>
-    <a href="{% url 'login' %}" id ="logout-btn">Logout</a>
+   
+    <a href="{% url 'logout' %}" id ="logout-btn">Logout</a>
 </body>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -205,11 +199,13 @@
     integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
     crossorigin="anonymous"></script>
 <script>
+     a= false;
     function getAttendanceQR() {
         document.getElementById('getAtte').style.display = 'block';
         document.querySelector('.form').style.transform = 'translateX(50%)';
         document.getElementById('qrcode').style.display='flex';
         document.querySelector('.form').style.transform = 'translateX(200px)';
+        a= true
     }
 </script>
 

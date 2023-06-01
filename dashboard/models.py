@@ -72,6 +72,7 @@ class users(AbstractBaseUser):
     instructor_course= models.ForeignKey(Course,to_field='course_title', default='Introductio to Arteficial Intelegence', on_delete=models.CASCADE)
     student_department= models.ForeignKey(Department,to_field="department",default='.', on_delete=models.CASCADE)
     batch= models.CharField(max_length=50, null=False, default='-')
+    image = models.ImageField(upload_to='images/', null= True)
     roll= models.ForeignKey(roll, on_delete=models.CASCADE,to_field="roll", default=".")
     date_joined= models.DateTimeField(auto_now_add= True)
     last_login= models.DateTimeField(auto_now=True)

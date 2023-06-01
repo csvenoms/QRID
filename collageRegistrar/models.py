@@ -9,12 +9,8 @@ class Announcement(models.Model):
         return f"announcement\{self.announcer}\{filename}"
     announcement= models.ImageField(upload_to=uploadAnnouncement)
     announcement_time= models.DateTimeField(auto_now_add= True)
-    is_active = models.BooleanField(default=True)
-    deactivated_at = models.DateTimeField(null=True, blank=True)
-
-    def deactivate(self, duration_minutes=1):
-        self.deactivated_at = announcement_time + timezone.timedelta(minutes=duration_minutes)
-        self.save()
+   
+    
 
     def __str__(self):
         return self.announcer

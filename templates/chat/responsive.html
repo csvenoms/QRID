@@ -246,7 +246,9 @@ var time =date+"-"+isoDate.substr(11, 5);
 if (value.email == "{{userEmail|escapejs}}"){
 
  
-
+if (value.chfile){
+  
+}
   
     html += '<div class="msger-chat"><div class="msg right-msg"><divclass="msg-img"></div><div class="msg-bubble"style="background-color: lightblue"><div class="msg-info" ><div class="msg-info-name">'+value.name+'</div><div class="msg-info-time">'+time +'</div></div><div class="msg-text">';
       html+= value.message+'</div></div></div><dv><br/>';

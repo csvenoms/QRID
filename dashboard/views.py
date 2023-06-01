@@ -54,7 +54,7 @@ def login(request):
     }
     return render(request,'dashboard/login.html',context)
 
-
+@login_required()
 def logout(request):
     auth.logout(request)
     return redirect('login')
@@ -70,6 +70,7 @@ class GetSavedAnnouncements(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 from rest_framework.generics import RetrieveAPIView
 
@@ -94,3 +95,33 @@ class SavedAnnouncementApi(APIView):
 
         # Return the serialized data
         return Response(serializer.data)
+class DeleteUserSavedMessages(APIView):
+    def get(self, req,pk,pk2,*args,**kwargs):
+        mes= savedAnnouncements.objects.filter(user= pk, announcement = pk2).first()
+        mes.delete()
+        
+        return Response({"message":"deleted successfully"})
+
+
+class ChangePassword(APIView):
+    pass
+    def post(self, req,*args,**kwargs):
+        pass
+
+from rest_framework.parsers import MultiPartParser, FormParser
+
+class UserProfileUpdateView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get_object(self):
+        return self.request.user.userprofile
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = UserProfileUpdateSerializer(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            user_serializer = UserProfileSerializer(instance.user)
+            return Response(user_serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

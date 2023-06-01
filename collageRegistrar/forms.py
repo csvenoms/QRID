@@ -1,16 +1,14 @@
 from django.forms import ModelForm
 from . models import *
+from django import forms
 class AnnForm(ModelForm):
     class Meta:
         model = Announcement
-        fields=['announcer','announcement']
+        fields="__all__"
+        
 
 
 class GradesForm(ModelForm):
     class Meta:
         model= GradeCSVs
         fields=  "__all__"
-<<<<<<< HEAD
-    
-=======
->>>>>>> 89b72ec054789653b81752bb19cd4efad35c8598

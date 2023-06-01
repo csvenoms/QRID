@@ -34,8 +34,8 @@ tzdata==2022.7
 urllib3==2.0.2
 websocket==0.2.1
 zope.event==4.6
-<<<<<<< HEAD
+
 zope.interface==6.0
-=======
+
 zope.interface==6.0
->>>>>>> 89b72ec054789653b81752bb19cd4efad35c8598
+
