@@ -205,13 +205,24 @@
       <h2> {{group}} Group Chat</h2>
       
     </div>
-    <div class="chat-messages" id="messages" >
+    {% comment %} <div  id="messages" >
       <!-- Messages will be inserted here -->
      
      
-    </div>
+    </div> {% endcomment %}
  
+  <div id="myDiv" class="chat-messages">
 
+    {% for chat in chats %}
+    
+    <h3>{{chat.message}} </h3>
+    {% if chat.chfile %}
+    <a href={{chat.chfile}} download="{{chat.message}}">{{chat.message}}</a>
+    {% endif %}
+    {% endfor %}
+
+
+  </div>
     <form class="chat-input"  method="post" enctype="multipart/form-data">
 {% csrf_token %}
       
@@ -228,49 +239,35 @@
     </form>
   </div>
 
-  <script>
-   
-    // Function to get the chat messages with AJAX
-    function getChatMessages() {
-      $.ajax({
-        url: '/message/getMessageAPI/{{userEmail}}',
-        method: "GET",
-        dataType: "json",
-        success: function(data) {
-          // Parse the JSON data and generate HTML markup
-          var html = "";
-          $.each(data, function(index, value) {
-            var isoDate = value.time;
-var date = isoDate.substr(5, 5);
-var time =date+"-"+isoDate.substr(11, 5);
-if (value.email == "{{userEmail|escapejs}}"){
 
- 
-if (value.chfile){
   
-}
-  
-    html += '<div class="msger-chat"><div class="msg right-msg"><divclass="msg-img"></div><div class="msg-bubble"style="background-color: lightblue"><div class="msg-info" ><div class="msg-info-name">'+value.name+'</div><div class="msg-info-time">'+time +'</div></div><div class="msg-text">';
-      html+= value.message+'</div></div></div><dv><br/>';
- 
-}
-else{
-            html += '<div class="msger-chat"> <div class="msg left-msg" ><div class="msg-img" style="" ></div><div class="msg-bubble"style="background-color: lightgrey"><div class="msg-info"> <div class="msg-info-name">'+value.name+'</div> <div class="msg-info-time">'+time +'</div>  </div> <div class="msg-text">' + value.message + ' </div></div></div><div><br/>';
-    }      });
-    
-          // Update the HTML in the target element
-          $("#messages").html(html);
-        },
-        error: function(xhr) {
-         $('.chat-messages').html('Error: ' + xhr.status);
-        }
-      });
+
+    <script>
+      function receive(){
+        $.get('getMessageAPI/etsub@csv.cs', function(data){
+            if(data.length !== 0){
+                for(var i = 0; i < data.length; i++){
+                    var field = text.replace('{description}', data[i].message);
+                    var time = data[i].time.slice(0, 5) + ' a.m'
+                    field = field.replace('{time}', time);
+                    $('#myDiv').append(field);
+                    scrolltoend();
+                }
+            }
+        })
     }
 
-    // Function to refresh chat messages every 5 seconds
-    setInterval(getChatMessages, 1000);
-
-
-  </script>
+    function scrolltoend() {
+      $('#myDiv').stop().animate({
+          scrollTop: $('#myDiv')[0].scrollHeight
+      }, 800);
+  }
+  
+  $(function () {
+      setInterval(receive, 1000)
+  })
+    </script>
+   
+ 
 </body>
 </html>

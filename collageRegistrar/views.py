@@ -16,6 +16,7 @@ from .models import *
 from dashboard.models import users
 from django.http import JsonResponse
 
+from django.contrib.auth.decorators import login_required
 
 from dashboard.forms import CourseForm
 
@@ -44,6 +45,7 @@ def caesar_encrypt(plaintext, shift):
     return ciphertext  # Create your views here.
 
 from django.contrib import messages
+@login_required()
 def postAnnouncement(request):
     if request.method == 'POST':
         form = AnnForm(request.POST, request.FILES)
@@ -77,7 +79,7 @@ class AnnouncementApi(APIView):
         serializer = AnnouncementSerializer(actives, many=True)
         return Response(serializer.data)
 
-
+@login_required()
 def courseRegistration(req):
     plainText = "{" + f"'data': '{datetime.now().year} registration form'"+"}"
     shift = 3
@@ -134,15 +136,15 @@ def courseRegistration(req):
 
 userSet = {0, }
 
-
 class CourseReg(APIView):
     def post(self, request, format=None):
         if request.data['email'] in userSet:
             return (Response({"message": "user already regestered"}))
         else:
-            userSet.add(request.data['email'])
+            
             serializer = CourseRegistrationSerializer(data=request.data)
             if serializer.is_valid():
+                userSet.add(request.data['email'])
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -154,7 +156,7 @@ class GetUserData(APIView):
         udata = UserSerializer(data=user)
         return Response(udata.data)
 
-
+@login_required()
 def getUser(req):
     print(req.post)
     return redirect('register_course')
@@ -194,18 +196,18 @@ class MyModelUpdateAPIView(APIView):
                 print("serializer not valied")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+@login_required()
 def submitGrades(req):
     return HttpResponse("<h1>insert each users grade from a csv file to the grades table</h1>")
 
-
+@login_required()
 def updateUserProfile(req):
     return HttpResponse("<h1>update user batch, or delete grad user from the main user table</h1>")
-
+@login_required()
 def assignInstructor(req):
     return HttpResponse("<h1>assign instructor course, dept and batch</h1>")
 
-
+@login_required()
 def generate_csv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="mymodel.csv"'
@@ -221,11 +223,11 @@ def generate_csv(request):
 
     return response
 
-
+@login_required()
 def my_view(request):
     return redirect('courseRegistration')
 
-
+@login_required()
 def upload_csv(request):
     context = {
 
@@ -250,7 +252,7 @@ class GetGradeResult(APIView):
 
         return Response(data_dict)
 
-
+@login_required()
 def search_csv(search_attr):
     u = users.objects.get(email=search_attr)
     GetCsv = GradeCSVs.objects.get(dept=u.student_department.department, batch=u.batch)
@@ -270,7 +272,7 @@ def search_csv(search_attr):
     return data
 
 from dashboard.models import Course
-# Example usage
+@login_required()
 def insertcoursesfromcsv(req):
     if req.method=="POST":
         csv_file = req.FILES['csv_file']
@@ -294,8 +296,8 @@ class SemisterCoursesAPI(APIView):
         my_object = users.objects.filter(email=pk).first()
         sem= CourseRegitration.objects.filter(email=pk)
         print(my_object.student_department.department)
-        print(my_object.batch)
-        courses= Course.objects.filter(target_group = my_object.student_department.department, year = my_object.batch, semister= "I")
+        print(sem.semister)
+        courses= Course.objects.filter(target_group = my_object.student_department.department, year = my_object.batch, semister= sem.semister)
 
 
         
@@ -393,7 +395,7 @@ class ChangePasswordView(generics.UpdateAPIView):
         user.save()
         return Response({"status":"password changed"})
 
-        4
+        
 
   
     def put(self, request, *args, **kwargs):
@@ -414,3 +416,56 @@ class ChangePasswordView(generics.UpdateAPIView):
             return Response(response)
 
         return Response(serializer.errors, status=400)
+
+
+def registerUsers(req):
+    if req.method=="POST":
+        csv_file = req.FILES['csv_file']
+        csv_data = csv_file.read().decode('utf-8')
+        reader = csv.DictReader(csv_data.splitlines())
+        print('read')
+        for row in reader:
+            course= Course.objects.create(
+            course_title= row['course_title'],
+            course_code= row['course_code'],
+            credit_hour= row['credit_hour'],
+            semister= row['semister'],
+            target_group= row['target_group'],
+            year=row['year'],
+            )
+
+        return redirect('courseRegistration')
+
+def update_from_csv(request):
+    if request.method == 'POST':
+        form = MyModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            csv_file = form.cleaned_data['csv_file']
+            csv_data = csv.reader(csv_file.read().decode('utf-8').splitlines())
+
+            for row in csv_data:
+                model_instance = users.objects.get(email=row[0])
+                model_instance.roll = row[1]
+               
+                model_instance.save()
+
+            return render(request, 'success.html')
+    else:
+        form = {}
+
+    return render(request, 'update_from_csv.html', {'form': form})
+
+
+@login_required()
+def update(request, id):
+    data=users.objects.get(email = request.POST['email'])
+    
+    if request.method=='POST':
+        form=users.objects.update(request.POST, email= request.POST['email'])
+        form.save()
+        messages.success(request,'updated successfully')
+        return redirect('register_course')
+
+
+    return redirect('postAnnouncement')
+    

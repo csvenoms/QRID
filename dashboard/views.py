@@ -47,12 +47,14 @@ def login(request):
                 return redirect('home')
             elif str(u) == 'Student':
                 return redirect('getMessage')
+            elif str(u)=="college Registrar":
+                return redirect('register_course')
         else:
             messages.error(request, 'wrong username or password')
     context={
         "form": LoginiForm()
     }
-    return render(request,'dashboard/login.html',context)
+    return render(request,'dashboard/index.html',context)
 
 @login_required()
 def logout(request):

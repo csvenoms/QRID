@@ -4,17 +4,119 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register users</title>
+    <title>Home</title>
+
+    <style>
+        form {
+            border: 3px solid #f1f1f1;
+          }
+          
+          /* Full-width inputs */
+          input[type=text], input[type=password],input[type=email] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+          }
+          select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+          }
+          /* Set a style for all buttons */
+          button {
+            background-color: #04AA6D;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 40%;
+          }
+          
+          /* Add a hover effect for buttons */
+          button:hover {
+            opacity: 0.8;
+          }
+          
+          /* Extra style for the cancel button (red) */
+          .cancelbtn {
+            width: auto;
+            padding: 10px 18px;
+            background-color: #f44336;
+          }
+          
+          /* Center the avatar image inside this container */
+          .imgcontainer {
+            text-align: center;
+            margin: 24px 0 12px 0;
+          }
+          
+          /* Avatar image */
+          img.avatar {
+            width: 40%;
+            border-radius: 50%;
+          }
+          
+          /* Add padding to containers */
+          .container {
+            padding: 16px;
+          }
+          
+          /* The "Forgot password" text */
+          span.psw {
+            float: right;
+            padding-top: 16px;
+          }
+          
+          /* Change styles for span and cancel button on extra small screens */
+          @media screen and (max-width: 300px) {
+            span.psw {
+              display: block;
+              float: none;
+            }
+            .cancelbtn {
+              width: 40%;
+            }
+          }
+    </style>
 </head>
 <body>
-    <div>
-<form action="" method="post">
-    {%csrf_token%}
-    {{form}}
-  
-    <button type="submit">Register</button>
-</form>
+    <div style="width: fit-content; margin: 0 auto;">
+        {% if messages %}
+        {% for m in messages %}
+        <h2> {{m}} </h2>
+        {% endfor %}{% endif %}
+    <form action="{% url 'home' %}" method="post" style="width: 550px; margin-left: 10%" >
+        {% csrf_token %}
+        <div class="imgcontainer">
+            <h1>QRID-MS registration</h1>
+          <!-- <img src="https://img.icons8.com/?size=1x&id=114043&format=png" alt="Avatar" class="avatar"> -->
+        </div>
+      
+        <div class="container">
+       <label for="">first name</label> {{form.first_name}}
+        <label for="">last name</label> {{form.last_name}}
+        <label for="">email</label>  {{form.email}}
+        <label for="">phone no</label> {{form.phone_no}}
+        <label for="">Id no</label> {{form.student_id}}
 
-    </div>
+        <label for="">Department</label>  {{form.student_department}}
+        <label for="">batch</label>   {{form.batch}}
+        <label for="">password</label>   {{form.password1}}
+        <label for="">password2</label>   {{form.password2}} 
+        {% comment %} {{form}} {% endcomment %}
+
+          <button type="submit">Sign up</button>
+         
+        </div>
+      
+   
+      </form></div>
 </body>
 </html>

@@ -36,10 +36,12 @@ def gmessages(request,pk):
         if form.is_valid():
             form.save()
     user= users.objects.get(email=pk)
+    
     context= {
         "userEmail": pk,
         "user": user,
-        "group": f"{user.student_department.department} - {user.batch} year"
+        "group": f"{user.student_department.department} - {user.batch} year",
+        "chats": ChatMessage.objects.all()
     }
     return render(request, 'chat/responsive.html', context)
 
